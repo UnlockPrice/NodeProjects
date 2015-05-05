@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS `sepp_product_flipkart` (
+  `product_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `product_identifier` varchar(50) NOT NULL,
+  `spec_id` varchar(50) NOT NULL,
+  `product_brand` varchar(50) NOT NULL,
+  `title` varchar(500) DEFAULT NULL,
+  `inStock` tinyint(1) NOT NULL DEFAULT '0',
+  `manufacturer_id` int(11) NOT NULL,
+  `shipping` tinyint(1) NOT NULL DEFAULT '1',
+  `mrp` decimal(10,4) NOT NULL DEFAULT '0.0000',
+  `selling_price` decimal(10,4) NOT NULL DEFAULT '0.0000',
+  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `viewed` int(5) NOT NULL DEFAULT '0',
+  `emi_available` tinyint(1) NOT NULL DEFAULT '0',
+  `cod_available` tinyint(1) NOT NULL DEFAULT '0',
+  `image` varchar(100) DEFAULT NULL,
+  `discount_percentage` decimal(2,2) NOT NULL DEFAULT '0.00',
+  `product_url` text,
+  PRIMARY KEY (`product_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=333 ;
