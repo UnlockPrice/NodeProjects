@@ -16,8 +16,7 @@ exports.initialize = function (){
 		database : config.database,
 		multipleStatements:true
 	});
-	
-	
+		
 }
 exports.saveSpecifications = function(productIndex,obj,category, callback){
 	console.log('getSpecifications');
