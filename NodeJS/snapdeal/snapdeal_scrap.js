@@ -7,7 +7,7 @@ var request = require('request');
 var cheerio = require('cheerio');
 var mysql      = require('mysql');
 //var fs = require('fs');
-var respPending=0;
+var respPending=0;     
 var productSpecId=0;
 // file is included here:
 //eval(fs.readFileSync('specificationClass.js')+'');
