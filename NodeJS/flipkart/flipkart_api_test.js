@@ -34,7 +34,7 @@ exports.initialize = function(aId, tok, rtype,sec)
 	section = sec;
 	
 	pool      =    mysql.createPool({
-		connectionLimit : 30, //important
+		//connectionLimit : 30, //important
 		host     : config.host, 
 		user     : config.user, 
 		password : config.password,  
@@ -78,7 +78,7 @@ function parseModules(res){
 	res.on('end',function(){
 		var jsonData = JSON.parse(data);
 		var productURL = jsonData.apiGroups.affiliate.apiListings[section].availableVariants['v0.1.0'].get;
-		//	console.log(productURL);
+	//	console.log(productURL);
 		requestProduct(productURL);
 		
 	});
@@ -121,24 +121,11 @@ function parseProduct(res){
 		//console.log('nexturl:'+jsonData.nextUrl)
 		productList = productList.concat(jsonData.productInfoList);
 		productLength = productList.length;
+		console.log(productLength);
 		nextURL = jsonData.nextUrl;
-		if(nextURL)
-		{
+			//console.log(nextURL);
 			requestProduct(nextURL);
 		}
-		else
-		{
-			console.log(productLength);
-			if(productLength >0)
-			{
-				var d = new Date();
-				startTime = d.getTime();
-				for(var i=0;i<productLength;i++){
-					flipkart_scrap.scrapByCrawler(i, productList[i].productBaseInfo.productAttributes.productUrl, section,getSpecCallBack);
-				}
-			}
-		}
-		
 	});
 	
 }
@@ -175,39 +162,42 @@ function saveSpecCallBack(productIndex, specId,primeId,excluded){
 	//		res.json({"code" : 100, "status" : "Error in connection database"});
 	//		return;
 	//	}
-	pool.query(sql, function(err, rows, fields) 
-	{
+		pool.query(sql, function(err, rows, fields) 
+		{
+			
+			if (err) 
+			console.log(err);
+			
+			console.log('inserted:'+productIndex);
+			productCounter++;
+			
+			if(productCounter==productLength){
+				//connection.release();
+				var d = new Date();
+				var stopTime = d.getTime();
+				var elapsedTime = stopTime - startTime;
+				console.log('completed in '+elapsedTime);
+				if (nextURL)
+					requestProduct(nextURL)
+				else
+				process.exit(0);
+				return;
+			}
+			
+			
+		});
 		
-		if (err) 
-		console.log(err);
-		
-		console.log('inserted:'+productIndex);
-		productCounter++;
-		
-		if(productCounter==productLength){
-			//connection.release();
-			var d = new Date();
-			var stopTime = d.getTime();
-			var elapsedTime = stopTime - startTime;
-			console.log('completed in '+elapsedTime);
-			process.exit(0);
-			return;
-		}
-		
-		
-	});
-	
 //});
-//if(productCounter==productLength){
-//	connection.release();
-//	var d = new Date();
-//	var stopTime = d.getTime();
-//	var elapsedTime = stopTime - startTime;
-//	console.log('completed in '+elapsedTime);
+	//if(productCounter==productLength){
+	//	connection.release();
+	//	var d = new Date();
+	//	var stopTime = d.getTime();
+	//	var elapsedTime = stopTime - startTime;
+	//	console.log('completed in '+elapsedTime);
 //}
 //}
 }
 
 function sortFunc(a,b){
 	return a-b;
-	}										
+	}									

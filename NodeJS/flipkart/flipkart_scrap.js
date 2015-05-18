@@ -11,16 +11,11 @@ var productSpecId=0;
 var count = 1;
 var separateReqPool = {maxSockets: 50};
 
-
-
-//var flipkartAdapterObj = {"brand":"model","processor":"processor","systemmemory":"ram","hddcapacity":"hdd","operatingsystem":"os","graphicscard":"graphics"}
 var finalObj = {};
 var crawlerObj = new crawler({
-	maxConnections:50,
+	maxConnections:30,
 	callback: function(){}
 });
-//console.log(scrapobj.laptops);
-//scrapByCrawler(0, 'http://dl.flipkart.com/dl/sony-bravia-kdl-32w600a-80-cm-32-led-tv/p/itmdtmzftntyrywd?pid=TVSDTMZFNFRZD6AP&affid=adminunlo', 'televisions',getSpecIdCallBack);
 
 exports.scrapByCrawler=function(productIndex,url,category, callback){
 	//console.log('getSpecifications');
@@ -53,8 +48,15 @@ exports.scrapByCrawler=function(productIndex,url,category, callback){
 					}
 				}
 				//console.log(obj);
+				console.log('scraped:'+productIndex);
 				callback(productIndex, finalobj,category);
 				return; 
+			}
+			else //error handling
+			{
+			console.log('error:'+productIndex);
+				callback(productIndex, '',category);
+				return;
 			}
 		}
 	});
